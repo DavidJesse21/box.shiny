@@ -11,7 +11,7 @@ add_module_dir(mod_name, main_dir = "shinymodules", pkg = TRUE)
 
 \item{main_dir}{The name of the main module directory}
 
-\item{pkg}{Wether you are developing your app as a package.
+\item{pkg}{whether you are developing your app as a package.
 If TRUE then the directory will be created inside of the `/inst` directory.}
 }
 \description{

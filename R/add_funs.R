@@ -3,7 +3,7 @@
 #' @description This function is intended to create the directory for your modules.
 #'
 #' @param dir_name The name of your main module directory
-#' @param pkg Wether you are developing your app as a package.
+#' @param pkg whether you are developing your app as a package.
 #'    If TRUE then the directory will be created inside of the `/inst` directory.
 #'
 #' @importFrom usethis proj_path
@@ -31,7 +31,7 @@ add_main_dir <- function(dir_name = "shinymodules", pkg = TRUE) {
 #'
 #' @param mod_name The name/path of the new module directory
 #' @param main_dir The name of the main module directory
-#' @param pkg Wether you are developing your app as a package.
+#' @param pkg whether you are developing your app as a package.
 #'    If TRUE then the directory will be created inside of the `/inst` directory.
 #'
 #' @importFrom usethis proj_path
@@ -80,11 +80,11 @@ add_module_dir <- function(mod_name, main_dir = "shinymodules", pkg = TRUE) {
 #' @param main Logical to state if this is a main / top level module, that is going
 #'    to be placed directly in the ui and server functions of your shiny app.
 #'    This matters because it affects the \code{box::use()} declarations of the module
-#'    as well as wether a namespacing function needs to be applied to the ui function call of
+#'    as well as whether a namespacing function needs to be applied to the ui function call of
 #'    the module.
-#' @param pkg Wether you are developing your app as a package.
+#' @param pkg whether you are developing your app as a package.
 #'    If TRUE then the directory will be created inside of the `/inst` directory.
-#' @param open Wether to open the module file or not
+#' @param open whether to open the module file or not
 #'
 #'
 #' @importFrom usethis proj_path

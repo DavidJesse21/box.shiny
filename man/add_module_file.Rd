@@ -26,13 +26,13 @@ add_module_file(
 \item{main}{Logical to state if this is a main / top level module, that is going
 to be placed directly in the ui and server functions of your shiny app.
 This matters because it affects the \code{box::use()} declarations of the module
-as well as wether a namespacing function needs to be applied to the ui function call of
+as well as whether a namespacing function needs to be applied to the ui function call of
 the module.}
 
-\item{pkg}{Wether you are developing your app as a package.
+\item{pkg}{whether you are developing your app as a package.
 If TRUE then the directory will be created inside of the `/inst` directory.}
 
-\item{open}{Wether to open the module file or not}
+\item{open}{whether to open the module file or not}
 }
 \description{
 This function creates an R-file with your shiny module template. The argument `mod_name` needs to be the
