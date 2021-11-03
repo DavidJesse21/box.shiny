@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^dev\.R$
 ^app_test\.R$
+^README\.Rmd$
+^LICENSE\.md$
