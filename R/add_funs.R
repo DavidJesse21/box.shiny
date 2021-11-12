@@ -189,18 +189,24 @@ add_module_file <- function(mod_name, main_dir = "shinymodules",
     last_name <- last_name[length(last_name)]
     write_there("## To be copied into the UI:")
     if (main) {
-      write_there(sprintf("# %s$ui(YOUR_ID)", last_name))
-      #write_there(sprintf("# %s$ui(%s)"), last_name, paste(c("MODULE_ID", ui_params)))
+      write_there(
+        sprintf("# %s$ui(%s)", last_name, paste(c('"YOUR_ID"', ui_params), collapse = ", "))
+      )
     } else {
-      write_there(sprintf("# %s$ui(ns(YOUR_ID))", last_name))
+      write_there(
+        sprintf("# %s$ui(%s)", last_name, paste(c('ns("YOUR_ID")', ui_params), collapse = ", "))
+      )
     }
 
     write_there("")
     write_there("## To be copied into the Server")
-    write_there(sprintf("# %s$server(YOUR_ID)", last_name))
+    write_there(
+      sprintf("# %s$server(%s)", last_name, paste(c('"YOUR_ID"', server_params), collapse = ", "))
+    )
 
     # open file and print message
     if (open) file_show(mod_file)
     cli::cli_alert_success("Added module file {.file {mod_file}}")
   }
 }
+

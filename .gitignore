@@ -4,3 +4,4 @@
 .Ruserdata
 app_test.R
 dev.R
+inst/shinymodules
