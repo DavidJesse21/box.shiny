@@ -4,20 +4,13 @@
 \alias{add_module_dir}
 \title{Create a module directory}
 \usage{
-add_module_dir(mod_name, main_dir = "shinymodules", pkg = TRUE)
+add_module_dir(...)
 }
 \arguments{
-\item{mod_name}{The name/path of the new module directory}
-
-\item{main_dir}{The name of the main module directory}
-
-\item{pkg}{whether you are developing your app as a package.
-If TRUE then the directory will be created inside of the `/inst` directory.}
+\item{...}{Single character values to construct the path to your module directory
+(see \code{fs::path_wd}, but \code{ext} argument can and must be ignored).
+The directory will be created underneath the main module directory created with \code{box.shiny::add_main_dir}.}
 }
 \description{
 Create a module directory
-}
-\examples{
-add_module_dir("tabs")
-add_module_dir("tabs/tab_one")
 }

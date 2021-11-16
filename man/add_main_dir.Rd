@@ -4,14 +4,15 @@
 \alias{add_main_dir}
 \title{Create main module directory}
 \usage{
-add_main_dir(dir_name = "shinymodules", pkg = TRUE)
+add_main_dir(...)
 }
 \arguments{
-\item{dir_name}{The name of your main module directory}
-
-\item{pkg}{whether you are developing your app as a package.
-If TRUE then the directory will be created inside of the `/inst` directory.}
+\item{...}{Single character values to construct the path to your main module directory
+(see \code{fs::path_wd}).}
 }
 \description{
-This function is intended to create the directory for your modules.
+This function is intended to create the top level directory for your modules.
+On the one hand it will create the main module directory. On the other hand, it will also
+create a file \code{shinymodules_main_dir.txt} in your working directory, which will contain the
+relative path to the main directory.
 }

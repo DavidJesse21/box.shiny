@@ -5,40 +5,29 @@
 \title{Create a module file}
 \usage{
 add_module_file(
-  mod_name,
-  main_dir = "shinymodules",
+  ...,
   ui_params = NULL,
   server_params = NULL,
   main = FALSE,
-  pkg = TRUE,
   open = TRUE
 )
 }
 \arguments{
-\item{mod_name}{The name/path of the new module.}
+\item{...}{Single character values to construct the path to your module file
+(see \code{fs::path_wd}, but \code{ext} argument can and must be ignored).
+The file will be created underneath the main module directory created with \code{box.shiny::add_main_dir}.}
 
-\item{main_dir}{The name of the main parent directory of all modules}
+\item{ui_params}{Character vector of additional UI arguments you wish to include.}
 
-\item{ui_params}{Additional arguments for the ui function of the module}
+\item{server_params}{Character vector of additional server arguments you wish to include.}
 
-\item{server_params}{Additional arguments for the server function of the module}
+\item{main}{Logical value to indicate if this is your main / top level module.
+This is a module that is going to be placed directly into the UI and server functions
+of your shiny app.}
 
-\item{main}{Logical to state if this is a main / top level module, that is going
-to be placed directly in the ui and server functions of your shiny app.
-This matters because it affects the \code{box::use()} declarations of the module
-as well as whether a namespacing function needs to be applied to the ui function call of
-the module.}
-
-\item{pkg}{whether you are developing your app as a package.
-If TRUE then the directory will be created inside of the `/inst` directory.}
-
-\item{open}{whether to open the module file or not}
+\item{open}{Logical, whether to open the file or not.}
 }
 \description{
-This function creates an R-file with your shiny module template. The argument `mod_name` needs to be the
-   path of your module file, however you don't need to (and shouldn't) add the ".R" file extension to it.
-}
-\examples{
-add_module_dir("tabs")
-add_module_file("tabs/tab_one")
+This function creates an R-file with your shiny module template. The argument \code{mod_name} needs to be the
+path of your module file, however you don't need to (and shouldn't) add the ".R" file extension to it.
 }
