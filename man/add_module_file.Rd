@@ -14,7 +14,7 @@ add_module_file(
 }
 \arguments{
 \item{...}{Single character values to construct the path to your module file
-(see \code{fs::path_wd}, but \code{ext} argument can and must be ignored).
+(see \code{fs::path}, but \code{ext} argument can and must be ignored).
 The file will be created underneath the main module directory created with \code{box.shiny::add_main_dir}.}
 
 \item{ui_params}{Character vector of additional UI arguments you wish to include.}

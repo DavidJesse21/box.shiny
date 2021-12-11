@@ -1,54 +1,10 @@
-#' Create main module directory
-#'
-#' @description This function is intended to create the top level directory for your modules.
-#'    On the one hand it will create the main module directory. On the other hand, it will also
-#'    create a file `shinymodules_main_dir.txt` in your working directory, which will contain the
-#'    relative path to the main directory.
-#'
-#' @param ... Single character values to construct the path to your main module directory
-#'    (see `fs::path_wd`).
-#'
-#' @importFrom fs dir_exists dir_create path path_wd file_create
-#' @importFrom checkmate test_character
-#' @importFrom cli cli_alert_success
-#'
-#' @export
-add_main_dir <- function(...) {
-  # Only a single directory should be created.
-  arg_check <- sapply(list(...), test_character, len = 1L)
-  if (any(!arg_check)) {
-    stop(
-      "\n", paste(
-        "Please supply single character values only",
-        "to specify the path to your main module directory."
-      )
-    )
-  }
-
-  main_dir <- path_wd(..., ext = "")
-
-  if (dir_exists(main_dir)) {
-    message("The specified main module directory already exists.", "\n")
-  } else {
-    dir_create(main_dir)
-    # Store relative path to main module directory so it can be seen/used by other functions.
-    file_create("shinymodules_main_dir.txt")
-    main_dir_rel <- path(...)
-    writeLines(main_dir_rel, con = "shinymodules_main_dir.txt")
-    # Done.
-    cli_alert_success("Added main module dircetory {.file {main_dir}}")
-  }
-}
-
-
-
 #' Create a module directory
 #'
 #' @param ... Single character values to construct the path to your module directory
-#'    (see `fs::path_wd`, but `ext` argument can and must be ignored).
+#'    (see `fs::path`, but `ext` argument can and must be ignored).
 #'    The directory will be created underneath the main module directory created with `box.shiny::add_main_dir`.
 #'
-#' @importFrom fs dir_exists dir_create file_exists path_wd
+#' @importFrom fs dir_exists dir_create file_exists path
 #' @importFrom checkmate test_character
 #' @importFrom cli cli_alert_success
 #'
@@ -56,7 +12,7 @@ add_main_dir <- function(...) {
 add_module_dir <- function(...) {
   # `box.shiny::add_main_dir` must be executed first.
   if (!file_exists("shinymodules_main_dir.txt")) {
-    stop("\n", "Execute `box.shiny::add_main_dir()` first before proceeding with ",
+    stop("\n", "Run `box.shiny::add_main_module_dir(...)` first before proceeding with ",
          "the creation of your modules.")
   }
 
@@ -69,7 +25,7 @@ add_module_dir <- function(...) {
 
   # Create the module direcotry
   main_dir <- readLines("shinymodules_main_dir.txt")
-  mod_dir <- path_wd(main_dir, ..., ext = "")
+  mod_dir <- path(main_dir, ..., ext = "")
   if (dir_exists(mod_dir)) {
     message("This module directory already exists.", "\n")
   } else {
@@ -86,7 +42,7 @@ add_module_dir <- function(...) {
 #'    path of your module file, however you don't need to (and shouldn't) add the ".R" file extension to it.
 #'
 #' @param ... Single character values to construct the path to your module file
-#'    (see `fs::path_wd`, but `ext` argument can and must be ignored).
+#'    (see `fs::path`, but `ext` argument can and must be ignored).
 #'    The file will be created underneath the main module directory created with `box.shiny::add_main_dir`.
 #' @param ui_params Character vector of additional UI arguments you wish to include.
 #' @param server_params Character vector of additional server arguments you wish to include.
@@ -107,7 +63,7 @@ add_module_file <- function(...,
                             open = TRUE) {
   # `box.shiny::add_main_dir` must be executed first.
   if (!file_exists("shinymodules_main_dir.txt")) {
-    stop("\n", "Execute `box.shiny::add_main_dir()` first before proceeding with ",
+    stop("\n", "Run `box.shiny::add_main_module_dir(...)` first before proceeding with ",
          "the creation of your modules.")
   }
 
@@ -153,6 +109,11 @@ add_module_file <- function(...,
     }
 
     # Write UI code
+    write_there("box::use(")
+    write_there("  shiny[NS, tagList, moduleServer]")
+    write_there(")")
+    write_there("")
+    write_there("")
     write_there("#' UI")
     write_there("#'")
     write_there("#' @param id,input,output,session Internal parameters for {shiny}.")
@@ -166,9 +127,6 @@ add_module_file <- function(...,
     write_there(
       sprintf("ui <- function(%s) {", paste(c("id", ui_params), collapse = ", "))
     )
-    write_there("  box::use(shiny[NS, tagList])")
-    write_there("  # add ui dependencies here via `box::use()`")
-    write_there("  ")
     write_there("  ns <- NS(id)")
     write_there("  ")
     write_there("  tagList()")
@@ -188,11 +146,9 @@ add_module_file <- function(...,
     write_there(
       sprintf("server <- function(%s) {", paste(c("id", server_params), collapse = ", "))
     )
-    write_there("  box::use(shiny[moduleServer])")
     write_there("  moduleServer(id, function(input, output, session) {")
     write_there("    ns <- session$ns")
     write_there("    ")
-    write_there("    # add server dependencies here via `box::use()`")
     write_there("    ")
     write_there("  })")
     write_there("}")
@@ -204,12 +160,12 @@ add_module_file <- function(...,
     last_name <- path_args[length(path_args)]
     last_two <- path_args[c(length(path_args) - 1L, length(path_args))]
 
-    write_there("## To be copied into both UI and Server:")
+    write_there("## To be copied into the `box::use()` declaration at the beginning of your app or module:")
     if (main) {
-      write_there(sprintf("# box::use(%s)", path(main_dir, ...)))
+      write_there(paste0("# ", path(main_dir, ...)))
     } else {
       mod_name <- paste0(last_two, collapse = "/")
-      write_there(sprintf("# box::use(./%s)", mod_name))
+      write_there(paste0("# ./", mod_name))
     }
     write_there("")
 
@@ -236,6 +192,5 @@ add_module_file <- function(...,
   }
 
 }
-
 
 
