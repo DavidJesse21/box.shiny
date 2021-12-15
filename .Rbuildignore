@@ -4,3 +4,4 @@
 ^app_test\.R$
 ^README\.Rmd$
 ^LICENSE\.md$
+^\.Rprofile$
