@@ -1,24 +1,3 @@
-#' Add a directory for you app
-#'
-#' @description This function creates a directory called `app` in your project.
-#'    All your files and directories created with `{box.shiny}` will be placed inside
-#'    of this directory.
-#'
-#' @importFrom fs path dir_exists dir_create
-#' @importFrom cli cli_alert_success
-#'
-#' @export
-add_app_dir <- function() {
-  app_path <- path("app")
-  if (dir_exists(app_path)) {
-    message("Your app directory already exists.")
-  } else {
-    dir_create(app_path)
-    cli_alert_success("App directory {.file {app_path}} added")
-  }
-}
-
-
 #' Add main application files
 #'
 #' @description
@@ -29,151 +8,56 @@ add_app_dir <- function() {
 #' * `app/run_app.R`: The function to run the application
 #' * `app.R`: File for running the application
 #'
-#' @importFrom fs path file_exists
-#' @importFrom cli cli_alert_success
+#' @importFrom fs path path_wd dir_exists dir_create file_copy
+#'
+#' @export
 add_app_files <- function() {
-  all_files <- c(
-    app = path("app", ext = "R") ,
-    app_ui = path("app", "app_ui", ext = "R"),
-    app_server = path("app", "app_server", ext = "R"),
-    run_app = path("app", "run_app", ext = "R")
+  # Create application directory if needed
+  dir_app <- path("app")
+  if (!dir_exists(dir_app)) {
+    dir_create(dir_app)
+  }
+
+  # Create data.frame with information about each file that should be copied
+  file_names <- c("app", "app_ui", "app_server", "run_app")
+  dir_files <- system.file("app-files", package = "box.shiny")
+  files_source <- sapply(
+    file_names,
+    function(file) path(dir_files, file, ext = "R"),
+    USE.NAMES = FALSE
   )
+  df_files <- data.frame(
+    role = file_names,
+    path_source = files_source
+  )
+  df_files$path_proj <- ifelse(
+    df_files$role == "app",
+    path(df_files$role, ext = "R"),
+    path("app", df_files$role, ext = "R")
+  )
+  df_files$path_proj_wd <- path_wd(df_files$path_proj)
 
-  # Check if there are existing files
-  existing_files <- all_files[file_exists(all_files)]
+  # Check for existing files
+  df_exist <- df_files[file_exists(df_files$path_proj_wd),]
+  df_files <- df_files[!(df_files$role %in% df_exist$role),]
 
-  for (file in existing_files) {
+  # Inform user about existing files
+  for (file in df_exist$path_proj) {
     message(
       sprintf("File `%s` already exists. A new file will not be created.", file)
     )
   }
 
-  # Create each file if it does not exist yet
-
-  ## app/app_ui.R
-  if (!(all_files[["app_ui"]] %in% existing_files)) {
-    file_create(all_files[["app_ui"]])
-
-    write_there <- function(...){
-      write(..., file = all_files[["app_ui"]], append = TRUE)
+  # Copy other files from source
+  if (nrow(df_files > 0)) {
+    for (i in 1:nrow(df_files)) {
+      file_copy(
+        df_files[i, "path_source"],
+        df_files[i, "path_proj_wd"]
+      )
+      cli_alert_success('Added file {.file {df_files[i, "path_proj"]}}')
     }
-
-    write_there("box::use(")
-    write_there("  shiny[tagList, tags, fluidPage, addResourcePath],")
-    write_there("  fs[path, path_wd]")
-    write_there(")")
-    write_there("")
-    write_there("")
-    write_there("#' The application User-Interface")
-    write_there("#' ")
-    write_there("#' @param request Internal parameter for `{shiny}`.")
-    write_there("#' @export")
-    write_there("app_ui <- function(request) {")
-    write_there("  # Add a resource path for your app")
-    write_there('  # addResourcePath("www", path_wd("app", "www"))')
-    write_there("  ")
-    write_there("  tagList(")
-    write_there("    tags$head(")
-    write_there("      # include your app's metadata")
-    write_there("    ),")
-    write_there("    ")
-    write_there("    fluidPage()")
-    write_there("  )")
-    write_there("")
-    write_there("}")
-    write_there("")
-
-    cli_alert_success('Added file {.file {all_files[["app_ui"]]}}')
   }
-
-  ## app/app_server.R
-  if (!(all_files[["app_server"]] %in% existing_files)) {
-    file_create(all_files[["app_server"]])
-
-    write_there <- function(...){
-      write(..., file = all_files[["app_server"]], append = TRUE)
-    }
-
-    write_there("box::use()")
-    write_there("")
-    write_there("")
-    write_there("#' The application server-side")
-    write_there("#' ")
-    write_there("#' @param input,output,session Internal parameters for {shiny}.")
-    write_there("#'     DO NOT REMOVE.")
-    write_there("#' ")
-    write_there("#' @export")
-    write_there("app_server <- function(input, output, session) {")
-    write_there("  ")
-    write_there("}")
-    write_there("")
-
-    cli_alert_success('Added file {.file {all_files[["app_server"]]}}')
-  }
-
-
-  ## app/run_app.R
-  if (!(all_files[["run_app"]] %in% existing_files)) {
-    file_create(all_files[["run_app"]])
-
-    write_there <- function(...){
-      write(..., file = all_files[["run_app"]], append = TRUE)
-    }
-
-    write_there("#' Run the application")
-    write_there("#' ")
-    write_there("#' @export ")
-    write_there("run_app <- function(onStart = NULL,")
-    write_there("                    options = list(),")
-    write_there("                    enableBookmarking = NULL,")
-    write_there('                    uiPattern = "/") {')
-    write_there("  box::use(")
-    write_there("    ./app_ui[app_ui],")
-    write_there("    ./app_server[app_server],")
-    write_there("    shiny[shinyApp]")
-    write_there("    )")
-    write_there("  ")
-    write_there("  shinyApp(")
-    write_there("    ui = app_ui,")
-    write_there("    server = app_server,")
-    write_there("    onStart = onStart,")
-    write_there("    options = options,")
-    write_there("    enableBookmarking = enableBookmarking,")
-    write_there("    uiPattern = uiPattern")
-    write_there("  )")
-    write_there("}")
-    write_there("")
-
-    cli_alert_success('Added file {.file {all_files[["run_app"]]}}')
-  }
-
-  ## app.R
-  if (!(all_files[["app"]] %in% existing_files)) {
-    file_create(all_files[["app"]])
-
-    write_there <- function(...){
-      write(..., file = all_files[["app"]], append = TRUE)
-    }
-
-    write_there('options("box.path" = fs::path_wd("app"))')
-    write_there("")
-    write_there("# If in interactive/development mode run this:")
-    write_there("box.shiny::detach_all_mods()")
-    write_there("box.shiny::detach_all_pkgs()")
-    write_there("rm(list = ls())")
-    write_there("")
-    write_there("# Load app")
-    write_there("box::use(")
-    write_there("  run_app[run_app]")
-    write_there(")")
-    write_there("")
-    write_there("# Run app")
-    write_there("run_app()")
-    write_there("")
-
-    cli_alert_success('Added file {.file {all_files[["app"]]}}')
-  }
-
 }
 
 
@@ -190,7 +74,7 @@ add_app_files <- function() {
 #' @param ... Single character values to construct the path to your main module directory
 #'    (see `fs::path`).
 #'
-#' @importFrom fs dir_exists dir_create path file_create
+#' @importFrom fs dir_exists dir_create path file_create file_exists
 #' @importFrom checkmate test_character
 #' @importFrom cli cli_alert_success
 #'
@@ -211,6 +95,11 @@ add_main_module_dir <- function(...) {
 
   if (dir_exists(main_dir)) {
     message("The specified main module directory already exists.", "\n")
+  } else if (file_exists("shinymodules_main_dir.txt")) {
+    message(
+      "You have already created a main module directory.", "\n",
+      "A new directory will not be created."
+    )
   } else {
     dir_create(main_dir)
     # Store relative path to main module directory so it can be seen/used by other functions.
