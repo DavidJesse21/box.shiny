@@ -10,10 +10,11 @@
 #'
 #' @export
 add_module_dir <- function(...) {
-  # `box.shiny::add_main_dir` must be executed first.
-  if (!file_exists("shinymodules_main_dir.txt")) {
-    stop("\n", "Run `box.shiny::add_main_module_dir(...)` first before proceeding with ",
-         "the creation of your modules.")
+  # Project needs to be setup first.
+  if (!file_exists("shinymodules_dir.txt")) {
+    stop("\n", "Run `box.shiny::setup_project(...)` first in order to create ",
+         "the files and directories needed for the use of the ",
+         "`add_module_` functions.")
   }
 
   # Only a single directory should be created.
@@ -24,13 +25,13 @@ add_module_dir <- function(...) {
   }
 
   # Create the module direcotry
-  main_dir <- readLines("shinymodules_main_dir.txt")
+  main_dir <- readLines("shinymodules_dir.txt")
   mod_dir <- path(main_dir, ..., ext = "")
   if (dir_exists(mod_dir)) {
     message("This module directory already exists.", "\n")
   } else {
     dir_create(mod_dir)
-    cli_alert_success("Added module directory {.file {mod_dir}}")
+    cli_alert_success("Added module directory {.file {mod_dir}}.")
   }
 }
 
@@ -51,8 +52,8 @@ add_module_dir <- function(...) {
 #'    of your shiny app.
 #' @param open Logical, whether to open the file or not.
 #'
-#' @importFrom fs dir_exists file_exists file_show file_create path path_wd
-#' @importFrom checkmate test_character
+#' @importFrom fs dir_exists file_exists file_show file_create path
+#' @importFrom checkmate test_character assert_flag
 #' @importFrom cli format_error cli_alert_success
 #'
 #' @export
@@ -61,10 +62,11 @@ add_module_file <- function(...,
                             server_params = NULL,
                             main = FALSE,
                             open = TRUE) {
-  # `box.shiny::add_main_dir` must be executed first.
-  if (!file_exists("shinymodules_main_dir.txt")) {
-    stop("\n", "Run `box.shiny::add_main_module_dir(...)` first before proceeding with ",
-         "the creation of your modules.")
+  # Project needs to be setup first.
+  if (!file_exists("shinymodules_dir.txt")) {
+    stop("\n", "Run `box.shiny::setup_project(...)` first in order to create ",
+         "the files and directories needed for the use of the ",
+         "`add_module_` functions.")
   }
 
   # Make sure the created module file will live within the project/working directory.
@@ -83,9 +85,16 @@ add_module_file <- function(...,
     )
   }
 
+  # Remaining sanity checks
+  assert_character(ui_params, null.ok = TRUE)
+  assert_character(server_params, null.ok = TRUE)
+  assert_flag(main)
+  assert_flag(open)
+
+
   # Create path to module file.
-  main_dir <- readLines("shinymodules_main_dir.txt")
-  mod_file <- path_wd(main_dir, ..., ext = "R")
+  main_dir <- readLines("shinymodules_dir.txt")
+  mod_file <- path(main_dir, ..., ext = "R")
 
   # Check if directory for the file already exists.
   mod_dir <- dirname(mod_file)
@@ -158,14 +167,12 @@ add_module_file <- function(...,
     # Write help comments / code to be copied
     path_args <- c(...)
     last_name <- path_args[length(path_args)]
-    last_two <- path_args[c(length(path_args) - 1L, length(path_args))]
 
     write_there("## To be copied into the `box::use()` declaration at the beginning of your app or module:")
     if (main) {
-      write_there(paste0("# ", path(main_dir, ...)))
+      write_there(sprintf("# ./%s/%s", basename(main_dir), last_name))
     } else {
-      mod_name <- paste0(last_two, collapse = "/")
-      write_there(paste0("# ./", mod_name))
+      write_there(sprintf("# ./%s", last_name))
     }
     write_there("")
 
