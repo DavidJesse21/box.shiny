@@ -1,16 +1,24 @@
 Package: box.shiny
-Title: What the Package Does (One Line, Title Case)
+Title: Engineering Shiny Apps using Modules and the {box} Package
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "David",
+           family = "Jesse",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a license
+           email = "david.jesse@gmx.net")
+Description: This package comes with functions that help you with engineering complex Shiny apps.
+    Most importantly it lets you create template files for Shiny modules that use the {box}
+    package, which allows for a clean and intuitive organization of your app project.
+    Moreover, it supplies further useful functions, e.g. for creating helper functions or 
+    R6 classes for your app.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
-Suggests: tinytest
+Suggests: 
+    box,
+    tinytest
+Imports: 
+    checkmate,
+    fs
