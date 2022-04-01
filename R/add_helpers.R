@@ -8,11 +8,11 @@
 #' @importFrom cli cli_alert_success
 #'
 #' @export
-add_helper_ui <- function(helper_name, open = TRUE) {
+add_helper_ui = function(helper_name, open = TRUE) {
   assert_character(helper_name, len = 1L)
   assert_flag(open)
 
-  path_helper <- path("app", "helpers", "ui", helper_name, ext = "R")
+  path_helper = path("app", "helpers", "ui", helper_name, ext = "R")
 
   if (file_exists(path_helper)) {
     message(
@@ -37,11 +37,11 @@ add_helper_ui <- function(helper_name, open = TRUE) {
 #' @importFrom cli cli_alert_success
 #'
 #' @export
-add_helper_server <- function(helper_name, open = TRUE) {
+add_helper_server = function(helper_name, open = TRUE) {
   assert_character(helper_name, len = 1L)
   assert_flag(open)
 
-  path_helper <- path("app", "helpers", "server", helper_name, ext = "R")
+  path_helper = path("app", "helpers", "server", helper_name, ext = "R")
 
   if (file_exists(path_helper)) {
     message(

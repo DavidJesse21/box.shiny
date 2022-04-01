@@ -1,4 +1,4 @@
 # Hide messages and printing output
-quiet <- function(...) {
+quiet = function(...) {
   suppressMessages(invisible(...))
 }

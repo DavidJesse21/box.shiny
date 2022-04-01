@@ -1,7 +1,7 @@
 #source("helper_quiet.R")
 
-oldwd <- getwd()
-tmp <- fs::path_temp()
+oldwd = getwd()
+tmp   = fs::path_temp()
 setwd(tmp)
 
 # Setup project (in case this has not been done before)

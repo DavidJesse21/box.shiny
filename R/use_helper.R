@@ -10,11 +10,11 @@
 #' @importFrom fs path file_exists file_copy
 #'
 #' @export
-use_helper_ui <- function(choice) {
+use_helper_ui = function(choice) {
   assert_choice(choice, c("columns"))
 
-  file_source <- path(system.file("helpers-ui", package = "box.shiny"), choice, ext = "R")
-  file_target <- path("app", "helpers", "ui", choice, ext = "R")
+  file_source = path(system.file("helpers-ui", package = "box.shiny"), choice, ext = "R")
+  file_target = path("app", "helpers", "ui", choice, ext = "R")
 
   if (!file_exists(file_target)) {
     file_copy(file_source, file_target)

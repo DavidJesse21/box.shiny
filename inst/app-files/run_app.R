@@ -1,10 +1,10 @@
 #' Run the application
 #'
 #' @export
-run_app <- function(onStart = NULL,
-                    options = list(),
-                    enableBookmarking = NULL,
-                    uiPattern = "/") {
+run_app = function(onStart = NULL,
+                   options = list(),
+                   enableBookmarking = NULL,
+                   uiPattern = "/") {
   box::use(
     ./app_ui[app_ui],
     ./app_server[app_server],

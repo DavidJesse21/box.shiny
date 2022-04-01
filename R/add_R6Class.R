@@ -7,17 +7,17 @@
 #' @importFrom fs path file_exists file_create
 #'
 #' @export
-add_R6Class <- function(class_name, open = TRUE) {
+add_R6Class = function(class_name, open = TRUE) {
   assert_character(class_name, len = 1L)
   assert_flag(open)
 
-  dir_R6 <- path("app", "R6")
+  dir_R6 = path("app", "R6")
   if (!dir_exists(dir_R6)) {
     dir_create(dir_R6)
     cli_alert_success('Created directory {.file {dir_R6}}')
   }
 
-  file_R6 <- path(dir_R6, class_name, ext = "R")
+  file_R6 = path(dir_R6, class_name, ext = "R")
 
   if (file_exists(file_R6)) {
     message(
@@ -27,7 +27,7 @@ add_R6Class <- function(class_name, open = TRUE) {
   } else {
     file_create(file_R6)
 
-    write_there <- function(...){
+    write_there = function(...){
       write(..., file = file_R6, append = TRUE)
     }
 
@@ -38,7 +38,7 @@ add_R6Class <- function(class_name, open = TRUE) {
     write_there("")
     write_there("#' What does this R6 class do?")
     write_there("#' @export")
-    write_there(sprintf("%s <- R6Class(", class_name))
+    write_there(sprintf("%s = R6Class(", class_name))
     write_there(sprintf('  "%s",', class_name))
     write_there("")
     write_there("  private = list(),")

@@ -8,7 +8,7 @@ box::use(
 #'
 #' @param request Internal parameter for `{shiny}`.
 #' @export
-app_ui <- function(request) {
+app_ui = function(request) {
   # Add a resource path for your app
   addResourcePath("www", path_wd("app", "www"))
 

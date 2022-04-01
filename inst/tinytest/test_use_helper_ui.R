@@ -1,5 +1,5 @@
-oldwd <- getwd()
-tmp <- fs::path_temp()
+oldwd = getwd()
+tmp   = fs::path_temp()
 setwd(tmp)
 fs::dir_create("app", "helpers", "ui")
 use_helper_ui("columns")
@@ -10,7 +10,7 @@ expect_true(fs::file_exists(fs::path(
 
 # Test if it can be used as intended
 box::use(./app/helpers/ui/columns[...])
-test <- col_8("test")
+test = col_8("test")
 expect_equal(class(test), "shiny.tag")
 expect_equal(test$attribs$class, "col-sm-8")
 expect_equal(test$children[[1]], "test")

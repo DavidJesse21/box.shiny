@@ -6,25 +6,25 @@
 #' @importFrom fs path path_wd dir_create file_create file_copy dir_tree file_exists
 #'
 #' @export
-setup_project <- function(module_dir) {
+setup_project = function(module_dir) {
   assert_string(module_dir)
 
   # Create main project directories ----
   # main app directory
-  dir_main <- path("app")
+  dir_main = path("app")
   dir_create(dir_main)
   # main directory for shiny modules
-  dir_modules <- path(dir_main, module_dir)
+  dir_modules = path(dir_main, module_dir)
   dir_create(dir_modules)
   # directories for helper functions
-  dir_helpers <- path(dir_main, "helpers")
+  dir_helpers = path(dir_main, "helpers")
   dir_create(dir_helpers)
   dir_create(path(dir_helpers, "ui"))
   dir_create(path(dir_helpers, "server"))
   # directory for R6 classes
   dir_create(path(dir_main, "R6"))
   # directories for css, javascript etc.
-  dir_www <- path(dir_main, "www")
+  dir_www = path(dir_main, "www")
   dir_create(dir_www)
   dir_create(path(dir_www, "assets"))
   dir_create(path(dir_www, "styles"))
@@ -33,7 +33,7 @@ setup_project <- function(module_dir) {
   # Store supplied name of shiny module directory ----
   # Used for `add_module_` functions
   if (file_exists("shinymodules_dir.txt")) {
-    dir_modules_old <- readLines("shinymodules_dir.txt")
+    dir_modules_old = readLines("shinymodules_dir.txt")
     if (dir_modules_old != dir_modules) {
       warning(paste0(
         "\n",
@@ -54,22 +54,22 @@ setup_project <- function(module_dir) {
 
   # Create main app files ----
   # Construct paths to files that need to be copied
-  file_names <- c("app", "app_ui", "app_server", "run_app")
-  dir_files <- system.file("app-files", package = "box.shiny")
-  files_source <- path(dir_files, file_names, ext = "R")
+  file_names   = c("app", "app_ui", "app_server", "run_app")
+  dir_files    = system.file("app-files", package = "box.shiny")
+  files_source = path(dir_files, file_names, ext = "R")
   # Store information about files in a data.frame
-  df_files <- data.frame(
-    role = file_names,
+  df_files = data.frame(
+    role        = file_names,
     path_source = files_source
   )
   # Specify target path to which each file should be copied
-  df_files$path_proj <- ifelse(
+  df_files$path_proj = ifelse(
     df_files$role == "app",
     path(df_files$role, ext = "R"),
     path("app", df_files$role, ext = "R")
   )
-  df_files$path_proj_wd <- path_wd(df_files$path_proj)
-  df_files <- df_files[!file_exists(df_files$path_proj_wd),]
+  df_files$path_proj_wd = path_wd(df_files$path_proj)
+  df_files = df_files[!file_exists(df_files$path_proj_wd),]
   # Copy the files into the target project
   file_copy(df_files$path_source, df_files$path_proj_wd)
 

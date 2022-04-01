@@ -1,8 +1,8 @@
 # This test doesn't pass yet (message pattern causes error) but I think this
 # is because of the tinytest package
 
-oldwd <- getwd()
-tmp <- fs::path_temp()
+oldwd = getwd()
+tmp   = fs::path_temp()
 setwd(tmp)
 
 # File has not been created before and will be added now
@@ -21,8 +21,8 @@ expect_message(
 )
 
 # Test if creation of file has been successful
-lines_r6 <- readLines("app/R6/MyClass.R")
-expect_equal(lines_r6[8], "MyClass <- R6Class(")
+lines_r6 = readLines("app/R6/MyClass.R")
+expect_equal(lines_r6[8], "MyClass = R6Class(")
 expect_equal(lines_r6[9], '  "MyClass",')
 
 

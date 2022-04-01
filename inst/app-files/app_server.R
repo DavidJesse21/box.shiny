@@ -7,6 +7,6 @@ box::use()
 #'     DO NOT REMOVE.
 #'
 #' @export
-app_server <- function(input, output, session) {
+app_server = function(input, output, session) {
 
 }

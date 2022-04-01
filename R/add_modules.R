@@ -9,7 +9,7 @@
 #' @importFrom cli cli_alert_success
 #'
 #' @export
-add_module_dir <- function(...) {
+add_module_dir = function(...) {
   # Project needs to be setup first.
   if (!file_exists("shinymodules_dir.txt")) {
     stop("\n", "Run `box.shiny::setup_project(...)` first in order to create ",
@@ -18,15 +18,15 @@ add_module_dir <- function(...) {
   }
 
   # Only a single directory should be created.
-  arg_check <- sapply(list(...), test_character, len = 1L)
+  arg_check = sapply(list(...), test_character, len = 1L)
   if (any(!arg_check)) {
     stop("\n", "Please supply single character values only ",
          "to specify the path to the module directory.")
   }
 
   # Create the module direcotry
-  main_dir <- readLines("shinymodules_dir.txt")
-  mod_dir <- path(main_dir, ..., ext = "")
+  main_dir = readLines("shinymodules_dir.txt")
+  mod_dir  = path(main_dir, ..., ext = "")
   if (dir_exists(mod_dir)) {
     message("This module directory already exists.", "\n")
   } else {
@@ -57,11 +57,11 @@ add_module_dir <- function(...) {
 #' @importFrom cli format_error cli_alert_success
 #'
 #' @export
-add_module_file <- function(...,
-                            ui_params = NULL,
-                            server_params = NULL,
-                            main = FALSE,
-                            open = TRUE) {
+add_module_file = function(...,
+                           ui_params = NULL,
+                           server_params = NULL,
+                           main = FALSE,
+                           open = TRUE) {
   # Project needs to be setup first.
   if (!file_exists("shinymodules_dir.txt")) {
     stop("\n", "Run `box.shiny::setup_project(...)` first in order to create ",
@@ -75,7 +75,7 @@ add_module_file <- function(...,
   }
 
   # Only a single file should be created.
-  arg_check <- sapply(list(...), test_character, len = 1L)
+  arg_check = sapply(list(...), test_character, len = 1L)
   if (any(!arg_check)) {
     stop(
       "\n", paste(
@@ -93,11 +93,11 @@ add_module_file <- function(...,
 
 
   # Create path to module file.
-  main_dir <- readLines("shinymodules_dir.txt")
-  mod_file <- path(main_dir, ..., ext = "R")
+  main_dir = readLines("shinymodules_dir.txt")
+  mod_file = path(main_dir, ..., ext = "R")
 
   # Check if directory for the file already exists.
-  mod_dir <- dirname(mod_file)
+  mod_dir = dirname(mod_file)
   if (!dir_exists(mod_dir)) {
     stop(format_error(c(
       "The root directory {.file {mod_dir}} for your module file does not exist yet.",
@@ -113,7 +113,7 @@ add_module_file <- function(...,
     file_create(mod_file)
 
     # Function to write code to the file
-    write_there <- function(...){
+    write_there = function(...){
       write(..., file = mod_file, append = TRUE)
     }
 
@@ -134,9 +134,9 @@ add_module_file <- function(...,
     write_there("#' @export")
 
     write_there(
-      sprintf("ui <- function(%s) {", paste(c("id", ui_params), collapse = ", "))
+      sprintf("ui = function(%s) {", paste(c("id", ui_params), collapse = ", "))
     )
-    write_there("  ns <- NS(id)")
+    write_there("  ns = NS(id)")
     write_there("  ")
     write_there("  tagList()")
     write_there("}")
@@ -153,10 +153,10 @@ add_module_file <- function(...,
     write_there("#' @noRd")
     write_there("#' @export")
     write_there(
-      sprintf("server <- function(%s) {", paste(c("id", server_params), collapse = ", "))
+      sprintf("server = function(%s) {", paste(c("id", server_params), collapse = ", "))
     )
     write_there("  moduleServer(id, function(input, output, session) {")
-    write_there("    ns <- session$ns")
+    write_there("    ns = session$ns")
     write_there("    ")
     write_there("    ")
     write_there("  })")
@@ -165,8 +165,8 @@ add_module_file <- function(...,
     write_there("")
 
     # Write help comments / code to be copied
-    path_args <- c(...)
-    last_name <- path_args[length(path_args)]
+    path_args = c(...)
+    last_name = path_args[length(path_args)]
 
     write_there("## To be copied into the `box::use()` declaration at the beginning of your app or module:")
     if (main) {
