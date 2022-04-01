@@ -18,7 +18,7 @@ add_module_dir = function(...) {
   }
 
   # Only a single directory should be created.
-  arg_check = sapply(list(...), test_character, len = 1L)
+  arg_check = vapply(list(...), test_character, logical(1L), len = 1L)
   if (any(!arg_check)) {
     stop("\n", "Please supply single character values only ",
          "to specify the path to the module directory.")
@@ -75,7 +75,7 @@ add_module_file = function(...,
   }
 
   # Only a single file should be created.
-  arg_check = sapply(list(...), test_character, len = 1L)
+  arg_check = vapply(list(...), test_character, logical(1L), len = 1L)
   if (any(!arg_check)) {
     stop(
       "\n", paste(
