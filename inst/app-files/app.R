@@ -7,7 +7,7 @@ rm(list = ls())
 
 # Load app
 box::use(
-  run_app[run_app]
+  ./app/run_app[run_app]
 )
 
 # Run app
