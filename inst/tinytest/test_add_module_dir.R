@@ -4,18 +4,10 @@ oldwd = getwd()
 tmp   = fs::path_temp()
 setwd(tmp)
 
-
-# Not having setup the project but using the functions should cause errors
-expect_error(
-  add_module_dir("first"),
-  "Run `box.shiny::setup_project(...)` first",
-  fixed = TRUE
-)
-
 # Setup project
-quiet(setup_project("shinymodules"))
+quiet(setup_project())
 
-# Test other sanity check
+# Only one directory at a time can be created.
 expect_error(
   add_module_dir(c("first", "second")),
   "Please supply single character values only"

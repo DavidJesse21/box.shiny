@@ -1,37 +1,32 @@
 #' Create a module directory
 #'
-#' @param ... Single character values to construct the path to your module directory
-#'    (see `fs::path`, but `ext` argument can and must be ignored).
-#'    The directory will be created underneath the main module directory created with `box.shiny::add_main_dir`.
+#' @param ... (`character(1)`)\cr
+#'   An arbitrary number of strings used to construct the path to the module directory
+#'   (see `fs::path()`).
 #'
 #' @importFrom fs dir_exists dir_create file_exists path
-#' @importFrom checkmate test_character
+#' @importFrom checkmate test_string
 #' @importFrom cli cli_alert_success
 #'
 #' @export
 add_module_dir = function(...) {
-  # Project needs to be setup first.
-  if (!file_exists("shinymodules_dir.txt")) {
-    stop("\n", "Run `box.shiny::setup_project(...)` first in order to create ",
-         "the files and directories needed for the use of the ",
-         "`add_module_` functions.")
-  }
-
   # Only a single directory should be created.
-  arg_check = vapply(list(...), test_character, logical(1L), len = 1L)
+  arg_check = vapply(list(...), test_string, logical(1L))
   if (any(!arg_check)) {
-    stop("\n", "Please supply single character values only ",
-         "to specify the path to the module directory.")
+    stop(
+      "\n", "Please supply single character values only ",
+      "to specify the path to the module directory.", "\n"
+    )
   }
 
   # Create the module direcotry
-  main_dir = readLines("shinymodules_dir.txt")
-  mod_dir  = path(main_dir, ..., ext = "")
-  if (dir_exists(mod_dir)) {
-    message("This module directory already exists.", "\n")
+  dir_modules = path("app", "shinymodules")
+  dir_new_mod  = path(dir_modules, ..., ext = "")
+  if (dir_exists(dir_new_mod)) {
+    message("This module directory already exists.")
   } else {
-    dir_create(mod_dir)
-    cli_alert_success("Added module directory {.file {mod_dir}}.")
+    dir_create(dir_new_mod)
+    cli_alert_success("Added module directory {.file {dir_new_mod}}.")
   }
 }
 
@@ -39,21 +34,22 @@ add_module_dir = function(...) {
 
 #' Create a module file
 #'
-#' @description This function creates an R-file with your shiny module template. The argument `mod_name` needs to be the
-#'    path of your module file, however you don't need to (and shouldn't) add the ".R" file extension to it.
-#'
-#' @param ... Single character values to construct the path to your module file
-#'    (see `fs::path`, but `ext` argument can and must be ignored).
-#'    The file will be created underneath the main module directory created with `box.shiny::add_main_dir`.
-#' @param ui_params Character vector of additional UI arguments you wish to include.
-#' @param server_params Character vector of additional server arguments you wish to include.
-#' @param main Logical value to indicate if this is your main / top level module.
-#'    This is a module that is going to be placed directly into the UI and server functions
-#'    of your shiny app.
-#' @param open Logical, whether to open the file or not.
+#' @param ... (`character(1)`)\cr
+#'   An arbitrary number of strings used to construct the path to the module file
+#'   (see `fs::path()`).
+#' @param ui_params (`character()`)\cr
+#'   A character vector of additional UI arguments you wish to include.
+#' @param server_params (`character()`)\cr
+#'   A character vector of additional server arguments you wish to include.
+#' @param main (`logical(1)`)\cr
+#'   Indicate whether this is your main / top level module.
+#'   The main module is one, which will be placed directly into the UI and server
+#'   functions of the app.
+#' @param open (`logical(1)`)\cr
+#'   Whether to open the file or not.
 #'
 #' @importFrom fs dir_exists file_exists file_show file_create path
-#' @importFrom checkmate test_character assert_flag
+#' @importFrom checkmate test_string assert_flag assert_character
 #' @importFrom cli format_error cli_alert_success
 #'
 #' @export
@@ -62,26 +58,17 @@ add_module_file = function(...,
                            server_params = NULL,
                            main = FALSE,
                            open = TRUE) {
-  # Project needs to be setup first.
-  if (!file_exists("shinymodules_dir.txt")) {
-    stop("\n", "Run `box.shiny::setup_project(...)` first in order to create ",
-         "the files and directories needed for the use of the ",
-         "`add_module_` functions.")
-  }
-
   # Make sure the created module file will live within the project/working directory.
   if (is.null(c(...))) {
     stop("\n", "Must not provide zero arguments to `...` to create the module file.")
   }
 
   # Only a single file should be created.
-  arg_check = vapply(list(...), test_character, logical(1L), len = 1L)
+  arg_check = vapply(list(...), test_string, logical(1L))
   if (any(!arg_check)) {
     stop(
-      "\n", paste(
-        "Please supply single character values only",
-        "to specify the path to the module file you want to create."
-      )
+      "\n", "Please supply single character values only ",
+      "to specify the path to the module file you want to create."
     )
   }
 
@@ -91,30 +78,29 @@ add_module_file = function(...,
   assert_flag(main)
   assert_flag(open)
 
-
   # Create path to module file.
-  main_dir = readLines("shinymodules_dir.txt")
-  mod_file = path(main_dir, ..., ext = "R")
+  dir_modules = path("app", "shinymodules")
+  file_new_mod = path(dir_modules, ..., ext = "R")
 
   # Check if directory for the file already exists.
-  mod_dir = dirname(mod_file)
-  if (!dir_exists(mod_dir)) {
+  dir_mod = dirname(file_new_mod)
+  if (!dir_exists(dir_mod)) {
     stop(format_error(c(
-      "The root directory {.file {mod_dir}} for your module file does not exist yet.",
+      "The root directory {.file {dir_mod}} for your module file does not exist yet.",
       "You can create it with {.code box.shiny::add_module_dir()}."
     )))
   }
 
   # Create module file.
-  if (file_exists(mod_file)) {
+  if (file_exists(file_new_mod)) {
     message("This module file already exists.")
-    file_show(mod_file)
+    file_show(file_new_mod)
   } else {
-    file_create(mod_file)
+    file_create(file_new_mod)
 
     # Function to write code to the file
     write_there = function(...){
-      write(..., file = mod_file, append = TRUE)
+      write(..., file = file_new_mod, append = TRUE)
     }
 
     # Write UI code
@@ -170,7 +156,7 @@ add_module_file = function(...,
 
     write_there("## To be copied into the `box::use()` declaration at the beginning of your app or module:")
     if (main) {
-      write_there(sprintf("# ./%s/%s", basename(main_dir), last_name))
+      write_there(sprintf("# ./%s/%s", basename(dir_modules), last_name))
     } else {
       write_there(sprintf("# ./%s", last_name))
     }
@@ -194,10 +180,7 @@ add_module_file = function(...,
     )
 
     # Done.
-    cli_alert_success("Added module file {.file {mod_file}}")
-    if (open) file_show(mod_file)
+    cli_alert_success("Added module file {.file {file_new_mod}}")
+    if (open) file_show(file_new_mod)
   }
-
 }
-
-

@@ -5,7 +5,7 @@ tmp   = fs::path_temp()
 setwd(tmp)
 
 # Setup project structure first in order to use and test `add_helper_` functions
-quiet(setup_project("shinymodules"))
+quiet(setup_project())
 
 
 # Test `add_helper_ui` function

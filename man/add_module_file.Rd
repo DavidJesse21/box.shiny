@@ -13,21 +13,24 @@ add_module_file(
 )
 }
 \arguments{
-\item{...}{Single character values to construct the path to your module file
-(see \code{fs::path}, but \code{ext} argument can and must be ignored).
-The file will be created underneath the main module directory created with \code{box.shiny::add_main_dir}.}
+\item{...}{(\code{character(1)})\cr
+An arbitrary number of strings used to construct the path to the module file
+(see \code{fs::path()}).}
 
-\item{ui_params}{Character vector of additional UI arguments you wish to include.}
+\item{ui_params}{(\code{character()})\cr
+A character vector of additional UI arguments you wish to include.}
 
-\item{server_params}{Character vector of additional server arguments you wish to include.}
+\item{server_params}{(\code{character()})\cr
+A character vector of additional server arguments you wish to include.}
 
-\item{main}{Logical value to indicate if this is your main / top level module.
-This is a module that is going to be placed directly into the UI and server functions
-of your shiny app.}
+\item{main}{(\code{logical(1)})\cr
+Indicate whether this is your main / top level module.
+The main module is one, which will be placed directly into the UI and server
+functions of the app.}
 
-\item{open}{Logical, whether to open the file or not.}
+\item{open}{(\code{logical(1)})\cr
+Whether to open the file or not.}
 }
 \description{
-This function creates an R-file with your shiny module template. The argument \code{mod_name} needs to be the
-path of your module file, however you don't need to (and shouldn't) add the ".R" file extension to it.
+Create a module file
 }

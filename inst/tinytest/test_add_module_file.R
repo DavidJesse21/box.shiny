@@ -4,16 +4,8 @@ oldwd = getwd()
 tmp   = fs::path_temp()
 setwd(tmp)
 
-
-# Not having setup the project but using the functions should cause errors
-expect_error(
-  add_module_file("first", open = FALSE),
-  "Run `box.shiny::setup_project(...)` first",
-  fixed = TRUE
-)
-
 # Setup project
-quiet(setup_project("shinymodules"))
+quiet(setup_project())
 
 # Sanity checks
 expect_error(
@@ -72,7 +64,6 @@ mod_lines = readLines("app/shinymodules/fourth.R")
 expect_equal(mod_lines[33], "# ./shinymodules/fourth")
 # Using `main = TRUE` no namespace function call will be added to the template code
 expect_equal(mod_lines[36], '# fourth$ui("YOUR_ID")')
-
 
 
 # Prevent unintended side effects for other tests

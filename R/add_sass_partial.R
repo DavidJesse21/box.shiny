@@ -1,9 +1,11 @@
 #' Add a `.scss` file
 #'
-#' @param name A name identifying the .scss file.
-#' @param main_import Whether to add a corresponding import declaration to the
-#'    main .scss file.
-#' @param Whether to open the file after it has beeen created.
+#' @param name (`character(1)`)\cr
+#'   A name identifying the .scss file.
+#' @param main_import (`logical(1)`)\cr
+#'   Whether to add a corresponding import declaration to the main .scss file.
+#' @param open (`logical(1)`)\cr
+#'   Whether to open the file after it has been created.
 #'
 #' @importFrom checkmate assert_string assert_flag
 #' @importFrom fs path file_create file_exists file_show

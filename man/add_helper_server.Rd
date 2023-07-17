@@ -4,12 +4,14 @@
 \alias{add_helper_server}
 \title{Add files for server helper functions}
 \usage{
-add_helper_server(helper_name, open = TRUE)
+add_helper_server(name, open = TRUE)
 }
 \arguments{
-\item{helper_name}{Name of the server helper (single character value)}
+\item{name}{(\code{character(1)})\cr
+Name of the server helper.}
 
-\item{open}{Whether to open the file or not}
+\item{open}{(\code{logical(1)})\cr
+Whether to open the file or not.}
 }
 \description{
 Add files for server helper functions

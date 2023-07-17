@@ -4,12 +4,14 @@
 \alias{add_helper_ui}
 \title{Add files for UI helper functions}
 \usage{
-add_helper_ui(helper_name, open = TRUE)
+add_helper_ui(name, open = TRUE)
 }
 \arguments{
-\item{helper_name}{Name of the UI helper (single character value)}
+\item{open}{(\code{logical(1)})\cr
+Whether to open the file or not.}
 
-\item{open}{Whether to open the file or not}
+\item{helper}{(\code{character(1)})\cr
+Name of the UI helper.}
 }
 \description{
 Add files for UI helper functions

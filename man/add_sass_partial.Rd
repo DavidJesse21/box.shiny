@@ -7,12 +7,14 @@
 add_sass_partial(name, main_import = TRUE, open = TRUE)
 }
 \arguments{
-\item{name}{A name identifying the .scss file.}
+\item{name}{(\code{character(1)})\cr
+A name identifying the .scss file.}
 
-\item{main_import}{Whether to add a corresponding import declaration to the
-main .scss file.}
+\item{main_import}{(\code{logical(1)})\cr
+Whether to add a corresponding import declaration to the main .scss file.}
 
-\item{Whether}{to open the file after it has beeen created.}
+\item{open}{(\code{logical(1)})\cr
+Whether to open the file after it has been created.}
 }
 \description{
 Add a \code{.scss} file

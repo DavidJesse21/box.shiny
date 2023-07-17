@@ -4,7 +4,8 @@
 #' Currently available choices for helper functions are:
 #' - "columns": Wrappers around shiny's `column` function
 #'
-#' @param choice A selection of which helper function to add.
+#' @param choice (`character()`)\cr
+#'   A selection of which helper functions to add.
 #'
 #' @importFrom checkmate assert_choice
 #' @importFrom fs path file_exists file_copy

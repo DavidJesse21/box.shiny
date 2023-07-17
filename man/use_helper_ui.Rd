@@ -7,7 +7,8 @@
 use_helper_ui(choice)
 }
 \arguments{
-\item{choice}{A selection of which helper function to add.}
+\item{choice}{(\code{character()})\cr
+A selection of which helper functions to add.}
 }
 \description{
 Currently available choices for helper functions are:

@@ -4,12 +4,14 @@
 \alias{add_R6Class}
 \title{Create a file for a new R6 class generator}
 \usage{
-add_R6Class(class_name, open = TRUE)
+add_R6Class(name, open = TRUE)
 }
 \arguments{
-\item{class_name}{The name of the R6 class.}
+\item{name}{(\code{character(1)})\cr
+The name of the R6 class.}
 
-\item{open}{Whether to open the file or not.}
+\item{open}{(\code{logical(1)})\cr
+Whether to open the file or not.}
 }
 \description{
 Create a file for a new R6 class generator

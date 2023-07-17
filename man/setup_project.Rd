@@ -4,10 +4,11 @@
 \alias{setup_project}
 \title{Set up the infrastructure for the shiny app}
 \usage{
-setup_project(module_dir)
+setup_project(dir = getwd())
 }
 \arguments{
-\item{module_dir}{...}
+\item{dir}{(\code{character(1)})\cr
+The directory in which to create the project.}
 }
 \description{
 Set up the infrastructure for the shiny app

@@ -7,9 +7,9 @@
 add_module_dir(...)
 }
 \arguments{
-\item{...}{Single character values to construct the path to your module directory
-(see \code{fs::path}, but \code{ext} argument can and must be ignored).
-The directory will be created underneath the main module directory created with \code{box.shiny::add_main_dir}.}
+\item{...}{(\code{character(1)})\cr
+An arbitrary number of strings used to construct the path to the module directory
+(see \code{fs::path()}).}
 }
 \description{
 Create a module directory
